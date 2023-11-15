@@ -139,6 +139,42 @@ func (bt *BaseTree) Path(index int) (ProofPath, error) {
 		PathRoot:      bt.layers[bt.levels][0]}, nil
 }
 
+/*
+*
+VerifyProof
+*
+*/
+func (bt *BaseTree) VerifyProof(elem Element, proof ProofPath) error {
+	index := IndexOfElement(bt.layers[0], elem, 0, nil)
+
+	var (
+		elIndex = index
+	)
+
+	for level := 0; level < bt.levels; level++ {
+		if proof.PathIndices[level] != elIndex%2 {
+			return fmt.Errorf("invalid proof")
+		}
+		leafIndex := elIndex ^ 1
+		if leafIndex < len(bt.layers[level]) {
+			if !bytes.Equal(proof.PathElements[level], bt.layers[level][leafIndex]) {
+				return fmt.Errorf("invalid proof")
+			}
+			if proof.PathPositions[level] != leafIndex {
+				return fmt.Errorf("invalid proof")
+			}
+		} else {
+			if !bytes.Equal(proof.PathElements[level], bt.zeros[level]) {
+				return fmt.Errorf("invalid proof")
+			}
+			if proof.PathPositions[level] != 0 {
+				return fmt.Errorf("invalid proof")
+			}
+		}
+		elIndex >>= 1
+	}
+	return nil
+}
 func (bt *BaseTree) buildZeros() {
 	bt.zeros = make([]Element, bt.levels+1)
 	bt.zeros[0] = bt.zeroElement
