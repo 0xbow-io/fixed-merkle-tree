@@ -1,4 +1,4 @@
-module github.com/n8wb/fixed-merkle-tree
+module github.com/0xbow-io/fixed-merkle-tree
 
 go 1.21.4
 
