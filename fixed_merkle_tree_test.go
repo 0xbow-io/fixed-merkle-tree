@@ -1,29 +1,12 @@
 package fMerkleTree
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"math/big"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
-
-func SHA256Hash(left Element, right Element) []byte {
-	hash := sha256.New()
-	sRight := hex.EncodeToString(right)
-	sLeft := hex.EncodeToString(left)
-	if sRight[0] == '0' && len(sRight) == 2 {
-		sRight = sRight[1:]
-	}
-	if sLeft[0] == '0' && len(sLeft) == 2 {
-		sLeft = sLeft[1:]
-	}
-	hash.Write([]byte(sLeft))
-	hash.Write([]byte(sRight))
-	//fmt.Printf("left=%s  right=%s val=%s\n", sLeft, sRight, sLeft+sRight)
-	return hash.Sum(nil)
-}
 
 func TestNewMerkleTree(t *testing.T) {
 	t.Run("should have correct zero root", func(t *testing.T) {
