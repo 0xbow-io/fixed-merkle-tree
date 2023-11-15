@@ -24,6 +24,18 @@ func SHA256Hash(left Element, right Element) []byte {
 	return hash.Sum(nil)
 }
 
+func Poseidon(left Element, right Element) []byte {
+	result, err := poseidon.Hash([]*big.Int{
+		big.NewInt(0).SetBytes(left),
+		big.NewInt(0).SetBytes(right),
+	})
+
+	if err != nil {
+		panic(err.Error())
+	}
+	return result.Bytes()
+}
+
 func Poseidon2(left Element, right Element) []byte {
 	result, err := poseidon.Poseidon2([]*big.Int{
 		big.NewInt(0).SetBytes(left),
