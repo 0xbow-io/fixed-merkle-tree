@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"math/big"
 
+	"github.com/0xbow-io/go-iden3-crypto/mimc7"
 	"github.com/0xbow-io/go-iden3-crypto/poseidon"
 )
 
@@ -45,5 +46,13 @@ func Poseidon2(left Element, right Element) []byte {
 	if err != nil {
 		panic(err.Error())
 	}
+	return result.Bytes()
+}
+
+func MIMC7(left Element, right Element) []byte {
+	result := mimc7.MIMC7Hash(
+		big.NewInt(0).SetBytes(left),
+		big.NewInt(0).SetBytes(right),
+	)
 	return result.Bytes()
 }
