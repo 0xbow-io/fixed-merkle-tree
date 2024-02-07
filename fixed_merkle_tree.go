@@ -124,11 +124,15 @@ func DeserializeMerkleTree(data SerializedTreeState, hashFn HashFunction) (*Merk
 
 	out := &MerkleTree{
 		BaseTree: &BaseTree{
-			levels: data.Levels,
+			levels: data.GetLevels(),
 			layers: layers,
 			zeros:  zeros,
 			hashFn: hashFn,
 		},
+	}
+	// check against root
+	if !out.Root().Cmp(data.GetRoot()) {
+		return nil, fmt.Errorf("root mismatch")
 	}
 	out.zeroElement = out.zeros[0]
 	return out, nil
